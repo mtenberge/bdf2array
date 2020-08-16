@@ -64,7 +64,7 @@ func (suite *testSuite) TestGlyph5x7Generate() {
 
 	// generate C code:
 	output := new(bytes.Buffer)
-	suite.NoError(suite.c.GenerateCStruct(output, "const static uint8_t fontData[] __attribute((\"PROGMEM\"))"))
+	suite.NoError(suite.c.GenerateCStruct(output, "const static uint8_t fontData[] PROGMEM"))
 
 	// compare the results:
 	expected, err := ioutil.ReadFile("testdata/CStruct5x7.c")
@@ -110,7 +110,7 @@ func (suite *testSuite) TestGlyph6x13Generate() {
 
 	// generate C code:
 	output := new(bytes.Buffer)
-	suite.NoError(suite.c.GenerateCStruct(output, "const static uint8_t fontData[] __attribute((\"PROGMEM\"))"))
+	suite.NoError(suite.c.GenerateCStruct(output, "const static uint8_t fontData[] PROGMEM"))
 
 	// compare the results:
 	expected, err := ioutil.ReadFile("testdata/CStruct6x13.c")
