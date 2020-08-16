@@ -1,0 +1,27 @@
+# Options for golangCI-Lint
+
+run:
+  skip-files:
+    - ".*_mock.go$"
+
+linters:
+  enable-all: true
+  disable:
+    - lll
+    - gochecknoglobals
+    - wsl
+    - funlen
+    - interfacer # deprecated, see https://github.com/luigi-riefolo/interfacer
+
+linters_settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+
+  golint:
+    min-confidence: 0
+
+issues:
+  exclude-use-default: false
+  exclude:
+    - Potential file inclusion via variable
