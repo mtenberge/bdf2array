@@ -6,6 +6,7 @@ import (
 	"image"
 	"io"
 	"io/ioutil"
+	"os"
 	"sort"
 
 	"github.com/zachomedia/go-bdf"
@@ -36,10 +37,26 @@ func NewConverter() *Converter {
 }
 
 // LoadFontFromFile loads the specified file, which must contain uncompressed BDF font data.
-func (c *Converter) LoadFontFromFile(filename string) error {
-	fontdata, err := ioutil.ReadFile(filename)
+func (c *Converter) LoadFontFromFile(filename string) (err error) {
+	f, err := os.Open(filename)
 	if err != nil {
 		return err
+	}
+	defer func() {
+		err = f.Close()
+	}()
+
+	return c.LoadFont(f)
+}
+
+// LoadFont loads the font from the specified io.Reader.
+func (c *Converter) LoadFont(input io.Reader) error {
+	fontdata, err := ioutil.ReadAll(input)
+	if err != nil {
+		return err
+	}
+	if len(fontdata) == 0 {
+		return fmt.Errorf("empty input font data")
 	}
 
 	c.Font, err = bdf.Parse(fontdata)

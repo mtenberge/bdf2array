@@ -1,0 +1,5 @@
+# compiled command-line executable:
+/bdf2array
+
+# generated output (unit tests):
+testdata/output.c

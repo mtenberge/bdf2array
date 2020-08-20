@@ -4,7 +4,7 @@ This library currently supports one encoding method, 'Byte-row encoding'.
 For an other encoding method, and an extended graphics library, see https://github.com/olikraus/u8g2.
 
 ## Byte-row encoding
-This encoding is optimized for monochrome displays (such as OLED displays), where the pixels are addressed in horizontal rows having a height of 8 pixels (i.e. each row is 1 byte high), and where the microcontroller does not have video buffer memory. The upper pixel of each row corresponds to the Least Significant Bit.
+This encoding is optimized for monochrome displays (such as OLED displays), where the pixels are addressed in horizontal rows having a height of 8 pixels (i.e. each row is 1 byte high, LSB is on top), and where the microcontroller does not have video buffer memory.
 
 It has the following properties:
 - proportional width glyphs
