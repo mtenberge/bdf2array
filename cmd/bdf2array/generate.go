@@ -36,7 +36,10 @@ func generate() (err error) {
 			return
 		}
 		defer func() {
-			err = fontFile.Close()
+			err2 := fontFile.Close()
+			if err == nil {
+				err = err2
+			}
 		}()
 	}
 
@@ -76,7 +79,10 @@ func generate() (err error) {
 			return
 		}
 		defer func() {
-			err = headFile.Close()
+			err2 := headFile.Close()
+			if err == nil {
+				err = err2
+			}
 		}()
 	}
 
@@ -90,7 +96,10 @@ func generate() (err error) {
 			return
 		}
 		defer func() {
-			err = outputFile.Close()
+			err2 := outputFile.Close()
+			if err == nil {
+				err = err2
+			}
 		}()
 	}
 
