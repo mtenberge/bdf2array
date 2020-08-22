@@ -9,7 +9,7 @@ import (
 	"github.com/mtenberge/bdf2array"
 )
 
-func generate() (err error) {
+func generate() (numGeneratedCodepoints int, err error) {
 	var argCodepoints intrange
 	for _, cp := range cmdLineOptions.Codepoints {
 		err = argCodepoints.Set(cp)
@@ -123,5 +123,6 @@ func generate() (err error) {
 		return
 	}
 
-	return nil
+	numGeneratedCodepoints = len(c.Glyphs)
+	return numGeneratedCodepoints, nil
 }

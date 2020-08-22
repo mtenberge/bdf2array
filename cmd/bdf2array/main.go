@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	"github.com/jessevdk/go-flags"
@@ -29,16 +29,25 @@ type CmdLineOptions struct {
 }
 
 var cmdLineOptions CmdLineOptions
-var parser = flags.NewParser(&cmdLineOptions, flags.Default)
+var parser = flags.NewParser(&cmdLineOptions, flags.HelpFlag|flags.PassDoubleDash)
 
 func main() {
 	_, err := parser.Parse()
 	if err != nil {
+		// print Usage information:
+		fmt.Fprintf(os.Stderr, "\n")
+		parser.WriteHelp(os.Stderr)
+
+		// Print the error text and exit:
+		fmt.Fprintf(os.Stderr, "\n\nError while parsing command line options: %s\n\n", err)
 		os.Exit(1)
 	}
 
-	err = generate()
+	var numGenerated int
+	numGenerated, err = generate()
 	if err != nil {
-		log.Fatalln(err)
+		fmt.Fprintf(os.Stderr, "\n\nError during conversion: %s\n\n", err)
+		os.Exit(1)
 	}
+	fmt.Fprintf(os.Stderr, "Successfully generated %d codepoints\n", numGenerated)
 }

@@ -18,7 +18,7 @@ const expectedWithoutHead = "testdata/expectedWithoutHead.c"
 
 func TestGenerateSuccessAllFiles(t *testing.T) {
 	// prepare config:
-	cmdLineOptions.Codepoints = []string{"0x30-0x32, 0x60"}
+	cmdLineOptions.Codepoints = []string{"0x30-0x32, 0x60, 0x7F"}
 	cmdLineOptions.FontFile = testFont
 	cmdLineOptions.OutputFile = testOutput
 	cmdLineOptions.HeadFile = testHead
@@ -26,7 +26,9 @@ func TestGenerateSuccessAllFiles(t *testing.T) {
 	cmdLineOptions.Declaration = testDeclaration
 	cmdLineOptions.OmitDJTs = false
 
-	assert.NoError(t, generate())
+	num, err := generate()
+	assert.NoError(t, err)
+	assert.Equal(t, 4, num)
 
 	// compare the result:
 	expected, err := ioutil.ReadFile(expectedWithHead)
@@ -46,7 +48,9 @@ func TestGenerateSuccessFilesWithoutHead(t *testing.T) {
 	cmdLineOptions.Declaration = testDeclaration
 	cmdLineOptions.OmitDJTs = false
 
-	assert.NoError(t, generate())
+	num, err := generate()
+	assert.NoError(t, err)
+	assert.Equal(t, 4, num)
 
 	// compare the result:
 	expected, err := ioutil.ReadFile(expectedWithoutHead)
@@ -80,7 +84,9 @@ func TestGenerateSuccessFontFromStdin(t *testing.T) {
 		os.Stdin = origStdin
 	}()
 
-	assert.NoError(t, generate())
+	num, err := generate()
+	assert.NoError(t, err)
+	assert.Equal(t, 4, num)
 
 	// compare the result:
 	expected, err := ioutil.ReadFile(expectedWithHead)
@@ -114,7 +120,9 @@ func TestGenerateSuccessHeadFromStdin(t *testing.T) {
 		os.Stdin = origStdin
 	}()
 
-	assert.NoError(t, generate())
+	num, err := generate()
+	assert.NoError(t, err)
+	assert.Equal(t, 4, num)
 
 	// compare the result:
 	expected, err := ioutil.ReadFile(expectedWithHead)
@@ -143,7 +151,9 @@ func TestGenerateSuccessOutputToStdout(t *testing.T) {
 		os.Stdout = origStdout
 	}()
 
-	assert.NoError(t, generate())
+	num, err := generate()
+	assert.NoError(t, err)
+	assert.Equal(t, 4, num)
 
 	assert.NoError(t, outfile.Close())
 
@@ -179,7 +189,7 @@ func TestGenerateErrorBothInputsFromStdin(t *testing.T) {
 		os.Stdin = origStdin
 	}()
 
-	err = generate()
+	_, err = generate()
 
 	if assert.Error(t, err) {
 		assert.Contains(t, err.Error(), "'input' and 'headfile' cannot both be read from '-' (stdin)")
@@ -196,7 +206,7 @@ func TestGenerateErrorFontFileNotExist(t *testing.T) {
 	cmdLineOptions.Declaration = testDeclaration
 	cmdLineOptions.OmitDJTs = false
 
-	err := generate()
+	_, err := generate()
 
 	if assert.Error(t, err) {
 		assert.Contains(t, err.Error(), "no such file or directory")
@@ -213,9 +223,26 @@ func TestGenerateErrorInvalidCodepoints(t *testing.T) {
 	cmdLineOptions.Declaration = testDeclaration
 	cmdLineOptions.OmitDJTs = false
 
-	err := generate()
+	_, err := generate()
 
 	if assert.Error(t, err) {
 		assert.Contains(t, err.Error(), "invalid syntax")
+	}
+}
+
+func TestGenerateErrorNonExistentCodepoint(t *testing.T) {
+	// prepare config:
+	cmdLineOptions.Codepoints = []string{"0x7F"}
+	cmdLineOptions.FontFile = testFont
+	cmdLineOptions.OutputFile = testOutput
+	cmdLineOptions.HeadFile = testHead
+	cmdLineOptions.StructName = testStructName
+	cmdLineOptions.Declaration = testDeclaration
+	cmdLineOptions.OmitDJTs = false
+
+	_, err := generate()
+
+	if assert.Error(t, err) {
+		assert.Contains(t, err.Error(), "none of the specified codepoints are present in the input font file")
 	}
 }

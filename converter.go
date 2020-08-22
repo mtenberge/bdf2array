@@ -74,7 +74,7 @@ func (c *Converter) IncludeCodepoint(codepoint int) (err error) {
 	}
 	bdfChar, ok := c.Font.Encoding[rune(codepoint)]
 	if !ok {
-		return fmt.Errorf("skipping codepoint %d (not present in font)", codepoint)
+		return fmt.Errorf("skipping codepoint 0x%02X (not present in font)", codepoint)
 	}
 
 	g := &Glyph{
