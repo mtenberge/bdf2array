@@ -48,8 +48,14 @@ func generate() (err error) {
 	for _, codepoint := range codepoints {
 		err = c.IncludeCodepoint(codepoint)
 		if err != nil {
-			return
+			fmt.Fprintln(os.Stderr, err)
+			err = nil // continue
 		}
+	}
+
+	if len(c.Glyphs) == 0 {
+		err = fmt.Errorf("none of the specified codepoints are present in the input font file")
+		return
 	}
 
 	// open head file:
