@@ -9,7 +9,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/zachomedia/go-bdf"
+	bdf "github.com/zachomedia/go-bdf"
 )
 
 const maxBytesPerLine = 16

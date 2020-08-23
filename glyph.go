@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"image"
 
-	"github.com/zachomedia/go-bdf"
+	bdf "github.com/zachomedia/go-bdf"
 )
 
 const maxNumBytesPerColumn = 4
@@ -115,7 +115,7 @@ func (g *Glyph) getEncoding() (result []byte, err error) {
 	result[0] = byte(g.Codepoint)
 	result[1] = byte(g.JumpOffset)
 	result[2] = byte(g.TopLeftOffset.Y)<<2 | (byte(g.BytesPerColumn-1) & 0x03) // nolint:gomnd
-	result[3] = byte(g.TopLeftOffset.Y)
+	result[3] = byte(g.TopLeftOffset.X)
 	result[4] = byte(g.Advance)
 	// and copy the data:
 	copy(result[5:], g.EncodedData)
