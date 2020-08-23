@@ -74,7 +74,7 @@ func (g *Glyph) encodeGlyph() (err error) {
 	}
 
 	dy := g.BoundingBox.Dy()
-	g.BytesPerColumn = (dy / 8) + 1
+	g.BytesPerColumn = ((dy - 1) / 8) + 1
 	if g.BytesPerColumn > maxNumBytesPerColumn {
 		return fmt.Errorf("character %d too tall (%d exceeds the maximum of 32)", g.Codepoint, dy)
 	}
